@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Form, Row, Col, Input, Button, Table } from 'antd';
+import { Form, Row, Col, Button, Table } from 'antd';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import './ListComponent.css';
 
@@ -49,6 +49,10 @@ export default class ListComponent extends Component {
                     </Row>
                 </Form>
 
+                {/* 操作区 */}
+                <div className='operation'>
+                    {this.props.getOperation()}
+                </div>
 
                 <div className="search-result-list">
                     <Table dataSource={dataSource} columns={columns} pagination={pagination} />

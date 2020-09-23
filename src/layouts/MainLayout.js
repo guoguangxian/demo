@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge, Button } from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     UserOutlined,
     VideoCameraOutlined,
-    UploadOutlined,
+    BellOutlined,
     HomeOutlined
 } from '@ant-design/icons';
 
@@ -26,8 +26,25 @@ export default class MainLayout extends Component {
         });
     };
 
+    dropdownMenu = () => {
+        return (
+            <Menu>
+                <Menu.Item>
+                    <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+                        个人中心
+                        </a>
+                </Menu.Item>
+                <Menu.Item>
+                    <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+                        修改密码
+                     </a>
+                </Menu.Item>
+                <Menu.Item danger>登出</Menu.Item>
+            </Menu>
+        )
+    }
+
     render() {
-        console.log(this.props)
         return (
             <Layout>
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
@@ -54,12 +71,34 @@ export default class MainLayout extends Component {
                 <Layout className="site-layout">
                     <div className='main-wrap'>
                         {/* 头部 */}
-                        <Header className="site-layout-background" style={{ padding: 0 }}>
+                        <Header className="site-layout-background" style={{ padding: 0, clear: "both" }}>
+
                             {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
                                 className: 'trigger',
                                 onClick: this.toggle,
                             })}
+
+                            <div style={{ float: "right", padding: "0 24px" }}>
+
+                                <div style={{ display: "inline-block", padding: "0 24px" }}>
+                                    <Badge count={0}>
+                                        <BellOutlined style={{ fontSize: '18px' }} />
+                                    </Badge>
+                                </div>
+
+                                <div style={{ display: "inline-block", padding: "0 24px" }}>
+                                    <Dropdown placement="bottomCenter" overlay={this.dropdownMenu}>
+                                        <div>
+                                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                                <Avatar icon={<UserOutlined />} />
+                                            </a>
+                                        </div>
+                                    </Dropdown>
+                                </div>
+
+                            </div>
                         </Header>
+
                         {/* 面包屑 */}
                         <Breadcrumb style={{ margin: '24px 16px 0 16px' }}>
                             {
