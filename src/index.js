@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import zhCN from 'antd/es/locale/zh_CN';
+import {ConfigProvider} from 'antd';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 
 ReactDOM.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <ConfigProvider locale={zhCN}>
     <App />
-  </React.StrictMode>,
+  </ConfigProvider>
+  // </React.StrictMode>
+  ,
   document.getElementById('root')
 );
 
