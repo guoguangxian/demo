@@ -1,24 +1,43 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge, Button } from 'antd';
+import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge } from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
     UserOutlined,
     VideoCameraOutlined,
     BellOutlined,
-    HomeOutlined
+    HomeOutlined,
+    SettingOutlined
 } from '@ant-design/icons';
 
 import './MainLayout.css'
 import { Link } from 'react-router-dom';
+import { createHashHistory } from "history";
+const history = createHashHistory();
 
 const { Header, Sider, Content, Footer } = Layout;
+const { SubMenu } = Menu;
 
 export default class MainLayout extends Component {
 
-    state = {
-        collapsed: false,
-    };
+    constructor() {
+        super()
+        this.state = {
+            collapsed: false,
+        }
+    }
+
+    componentWillMount() {
+        let userInfo = window.localStorage.getItem("userInfo");
+        console.log(history)
+        // 判断用户是否登录
+        if (!userInfo) {
+            console.log('userInfo:'+userInfo)
+            history.push({
+                pathname: "/login"
+            })
+        }
+    }
 
     toggle = () => {
         this.setState({
@@ -60,6 +79,20 @@ export default class MainLayout extends Component {
                                 用户管理
                             </Link>
                         </Menu.Item>
+                        <SubMenu
+                            key="systemMgr"
+                            title={
+                                <span>
+                                    <SettingOutlined />
+                                    <span>系统管理</span>
+                                </span>
+                            }
+                        >
+                            <Menu.Item key="9">Option 9</Menu.Item>
+                            <Menu.Item key="10">Option 10</Menu.Item>
+                            <Menu.Item key="11">Option 11</Menu.Item>
+                            <Menu.Item key="12">Option 12</Menu.Item>
+                        </SubMenu>
                         <Menu.Item key='3' icon={<VideoCameraOutlined />}>
                             <Link to='/login'>
                                 登录

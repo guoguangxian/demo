@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MainLayout from '../../layouts/MainLayout'
-import { Form, Row, Col, Input, Button, Table, Modal } from 'antd';
+import { Form, Row, Col, Input, Button, Modal } from 'antd';
 import './UserList.css';
 import ListComponent from '../../components/ListComponent';
 
