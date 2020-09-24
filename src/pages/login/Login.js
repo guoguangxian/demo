@@ -9,6 +9,9 @@ export default class Login extends Component {
 
     constructor() {
         super()
+        this.state = {
+            loginLoading: false
+        }
         this.onFinish = this.onFinish.bind(this)
     }
 
@@ -17,9 +20,12 @@ export default class Login extends Component {
         let userInfo = window.localStorage.getItem("userInfo");
         // 判断用户是否登录
         if (userInfo) {
-            this.props.history.push({
-                pathname: "/home"
-            })
+            setTimeout(() => {
+                this.props.history.push({
+                    pathname: "/home"
+                })
+            }, 500);
+           
         }
     }
 
@@ -27,6 +33,9 @@ export default class Login extends Component {
         console.log('onFinish:' + values)
         console.log(values.username)
 
+        this.setState({
+            loginLoading:true
+        })
 
         let reqData = {
             account: values.username,
@@ -34,14 +43,20 @@ export default class Login extends Component {
             clientType: 'web',
             deviceCode: 'web'
         }
-        userLogin(reqData).then(
+        
+       userLogin(reqData).then(
             (res) => {
                 console.log("get article response:", res);
-            },
-            (error) => {
-                console.log("get response failed!");
+                window.localStorage.setItem("userInfo", JSON.stringify({"a":1}))
+                this.setState({
+                    loginLoading:false
+                })
+                console.log(2222)
+                this.props.history.push('/home')
             }
         )
+        console.log(1111)
+        
     }
 
     render() {
@@ -66,7 +81,7 @@ export default class Login extends Component {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-form-button">
+                            <Button type="primary" htmlType="submit" loading={this.state.loginLoading} className="login-form-button">
                                 Log in
                             </Button>
                             Or <a href="">register now!</a>

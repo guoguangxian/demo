@@ -30,17 +30,19 @@ axios.interceptors.response.use(
     if (response) {
       switch (response.data.code) {
         case 200:
-          break
+          return response;
         default:
           message.error(response.data.msg);
+          return undefined;
       }
     }
-    return response;
+    message.error('服务发生错误');
+    return undefined;
   },
   (error) => {
     console.log("请求出错：", error);
     msag(error)
-    return error
+    // return error
   }
 );
 
@@ -92,6 +94,8 @@ function msag(err) {
         break;
       default:
     }
+  } else {
+    message.error('当前服务不可用')
   }
 }
 
@@ -126,12 +130,13 @@ export function post(url, data) {
   return new Promise((resolve, reject) => {
     axios.post(url, data).then(
       (response) => {
-        //关闭进度条
-        resolve(response.data);
-      },
-      (err) => {
-        reject(err);
+        resolve(response ? response.data : undefined);
       }
+      // ,
+      // (err) => {
+      //   console.log('-----'+err)
+      //   reject(err);
+      // }
     );
   });
 }

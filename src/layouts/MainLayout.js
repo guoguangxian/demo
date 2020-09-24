@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge } from 'antd';
+import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge, message, Spin } from 'antd';
 import {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
@@ -24,6 +24,7 @@ export default class MainLayout extends Component {
         super()
         this.state = {
             collapsed: false,
+            spinLoading: true
         }
     }
 
@@ -32,11 +33,19 @@ export default class MainLayout extends Component {
         console.log(history)
         // 判断用户是否登录
         if (!userInfo) {
-            console.log('userInfo:'+userInfo)
-            history.push({
-                pathname: "/login"
-            })
+            message.error('未登录不能访问系统')
+            setTimeout(function () {
+                history.push({
+                    pathname: "/login"
+                })
+            }, 500)
         }
+        setTimeout(() => {
+            this.setState({
+                spinLoading: false
+            })
+        }, 3000);
+
     }
 
     toggle = () => {
@@ -65,7 +74,9 @@ export default class MainLayout extends Component {
 
     render() {
         return (
+
             <Layout>
+
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className='logo'></div>
                     <Menu theme='dark' mode='inline' defaultSelectedKeys={this.props.selectedKeys}>
@@ -134,7 +145,7 @@ export default class MainLayout extends Component {
 
                         {/* 面包屑 */}
                         <Breadcrumb style={{ margin: '24px 16px 0 16px' }}>
-                            {
+                            {/* {
                                 this.props.crumbs.map(function (item, index) {
                                     if (item.clickable) {
                                         return (
@@ -150,9 +161,10 @@ export default class MainLayout extends Component {
                                         )
                                     }
                                 })
-                            }
+                            } */}
                         </Breadcrumb>
 
+                        {/* 主内容 */}
                         <Content className="site-layout-background"
                             style={{
                                 margin: '24px 16px',
@@ -160,7 +172,9 @@ export default class MainLayout extends Component {
                                 minHeight: 280,
                             }}
                         >
-                            {this.props.children}
+                            <Spin spinning={this.state.spinLoading} size="large">
+                                {this.props.children}
+                            </Spin>
                         </Content>
 
                         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>

@@ -18,9 +18,10 @@ export default class Home extends Component {
     render() {
 
         return (
-            <MainLayout crumbs={crumbs} selectedKeys={['1']}>
-                首页
-            </MainLayout>
+            <div>首页</div>
+            // <MainLayout crumbs={crumbs} selectedKeys={['1']}>
+            //     首页
+            // </MainLayout>
         )
     }
 }

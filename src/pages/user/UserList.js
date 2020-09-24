@@ -135,7 +135,8 @@ export default class UserList extends Component {
         }
 
         return (
-            <MainLayout crumbs={crumbs} selectedKeys={['2']}>
+            // <MainLayout crumbs={crumbs} selectedKeys={['2']}>
+                <div>
                 <ListComponent dataSource={dataSource} columns={columns} pagination={pagination}
                     onFinish={this.onFinish} getFields={this.getFields} getOperation={this.getOperation}  ></ListComponent>
                 <Modal
@@ -158,7 +159,8 @@ export default class UserList extends Component {
                     <p>Some contents...</p>
                     <p>Some contents...</p>
                 </Modal>
-            </MainLayout>
+                </div>
+            // </MainLayout>
         )
     }
 }
