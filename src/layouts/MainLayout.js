@@ -79,7 +79,7 @@ export default class MainLayout extends Component {
 
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className='logo'></div>
-                    <Menu theme='dark' mode='inline' defaultSelectedKeys={this.props.selectedKeys}>
+                    <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
                         <Menu.Item key="1" icon={< HomeOutlined />}>
                             <Link to='/'>
                                 首页
