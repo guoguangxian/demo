@@ -1,0 +1,42 @@
+const MenuConfig=[
+    {
+        "key":"home",
+        "name":"首页",
+        "path":"/",
+        "icon":"HomeOutlined"
+    },
+    {
+        "key":"userMgr",
+        "name":"用户管理",
+        "path":"/user/list",
+        "icon":"UserOutlined"
+    },
+    {
+        "key":"test",
+        "name":"测试管理",
+        "path":"",
+        "icon":"MenuFoldOutlined",
+        "children":[
+            {
+                "key":"test1",
+                "name":"测试子菜单1",
+                "path":"/test1",
+                "icon":""
+            },
+            {
+                "key":"test2",
+                "name":"测试子菜单2",
+                "path":"/test2",
+                "icon":""
+            }
+        ]
+    },
+    {
+        "key":"login",
+        "name":"登录页",
+        "path":"/login",
+        "icon":"MenuUnfoldOutlined"
+    }
+]
+
+export default MenuConfig
