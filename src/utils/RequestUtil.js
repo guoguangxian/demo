@@ -1,5 +1,5 @@
-import axios from 'axios'
 import { message } from 'antd';
+import axios from 'axios';
 
 axios.defaults.timeout = 100000;
 axios.defaults.baseURL = "http://localhost:8401";
@@ -33,11 +33,12 @@ axios.interceptors.response.use(
           return response;
         default:
           message.error(response.data.msg);
-          return undefined;
+          return undefined
       }
     }
     message.error('服务发生错误');
-    return undefined;
+
+    return undefined
   },
   (error) => {
     console.log("请求出错：", error);

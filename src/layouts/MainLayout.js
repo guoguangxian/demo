@@ -1,44 +1,46 @@
-import React, { Component } from 'react'
-import { Layout, Menu, Breadcrumb, Avatar, Dropdown, Badge, message, Spin } from 'antd';
 import {
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-    BellOutlined,
-    HomeOutlined,
-    SettingOutlined
-} from '@ant-design/icons';
+    BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
 
-import './MainLayout.css'
-import { Link } from 'react-router-dom';
-import { createHashHistory } from "history";
-const history = createHashHistory();
+    UserOutlined
+} from '@ant-design/icons';
+import { Avatar, Badge, Breadcrumb, Dropdown, Layout, Menu, message, Spin } from 'antd';
+import React, { Component } from 'react';
+import MenuComponent from '../components/MenuComponent';
+import MenuConfig from '../config/MenuConfig';
+import './MainLayout.css';
+import {withRouter} from "react-router-dom";
+
 
 const { Header, Sider, Content, Footer } = Layout;
-const { SubMenu } = Menu;
 
-export default class MainLayout extends Component {
+class MainLayout extends Component {
 
     constructor() {
         super()
         this.state = {
             collapsed: false,
-            spinLoading: true
+            spinLoading: true,
+            sideMenuSelectedKeys: [],
+            menuPathKeyMap: new Map()
         }
+
+        this.handlerSiderMenuClick = this.handlerSiderMenuClick.bind(this)
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        console.log('componentDidMount')
+        console.log(this)
         let userInfo = window.localStorage.getItem("userInfo");
-        console.log(history)
         // 判断用户是否登录
+        console.log(this.props)
         if (!userInfo) {
             message.error('未登录不能访问系统')
-            setTimeout(function () {
-                history.push({
-                    pathname: "/login"
-                })
+            let history = this.props.history;
+            this.aa = setTimeout(function () {
+                console.log()
+                history.push("/login")
             }, 500)
+            return
         }
         setTimeout(() => {
             this.setState({
@@ -46,6 +48,37 @@ export default class MainLayout extends Component {
             })
         }, 3000);
 
+        // 设置路径和菜单key的映射关系
+        let map = this.changeToMenuMap(MenuConfig)
+
+        console.log(map)
+
+        // 设置菜单选中 
+        let pathname = this.props.history.location.pathname;
+        let menuKey = map.get(pathname)
+        console.log(menuKey)
+
+        this.setState({
+            menuPathKeyMap: map,
+            sideMenuSelectedKeys: [menuKey]
+        })
+    }
+
+    componentWillUnmount(){
+        clearTimeout(this.aa)
+    }
+
+    changeToMenuMap = (data) => {
+        let map = new Map()
+        data.map((item, index) => {
+            map.set(item.path, item.key);
+            let childrenMap = item.children && item.children.length > 0 ? this.changeToMenuMap(item.children) : new Map()
+            for (let [k, v] of childrenMap) {
+                map.set(k, v)
+            }
+            return map;
+        })
+        return map;
     }
 
     toggle = () => {
@@ -54,6 +87,7 @@ export default class MainLayout extends Component {
         });
     };
 
+    // 头像下拉菜单
     dropdownMenu = () => {
         return (
             <Menu>
@@ -67,49 +101,42 @@ export default class MainLayout extends Component {
                         修改密码
                      </a>
                 </Menu.Item>
-                <Menu.Item danger>登出</Menu.Item>
+                <Menu.Divider />
+                <Menu.Item onClick={this.handlerLogout}>退出登录</Menu.Item>
             </Menu>
         )
     }
 
+    handlerLogout=()=> {
+        window.localStorage.removeItem("userInfo")
+        this.props.history.push("/login")
+    }
+
+    handlerSiderMenuClick({ item, key, keyPath, domEvent }) {
+        this.setState({
+            sideMenuSelectedKeys: [key]
+        })
+    }
+
+    getAccount() {
+        let userInfo = window.localStorage.getItem("userInfo");
+        let account = '';
+        if (userInfo) {
+            account = JSON.parse(userInfo).account;
+        }
+        return account
+    }
+
     render() {
+        let account = this.getAccount();
+        console.log('render')
         return (
-
+           
             <Layout>
-
+                {/* 侧边栏 */}
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
                     <div className='logo'></div>
-                    <Menu theme='dark' mode='inline' defaultSelectedKeys={['1']}>
-                        <Menu.Item key="1" icon={< HomeOutlined />}>
-                            <Link to='/'>
-                                首页
-                            </Link>
-                        </Menu.Item>
-                        <Menu.Item key='2' icon={<UserOutlined />}>
-                            <Link to='/user/list'>
-                                用户管理
-                            </Link>
-                        </Menu.Item>
-                        <SubMenu
-                            key="systemMgr"
-                            title={
-                                <span>
-                                    <SettingOutlined />
-                                    <span>系统管理</span>
-                                </span>
-                            }
-                        >
-                            <Menu.Item key="9">Option 9</Menu.Item>
-                            <Menu.Item key="10">Option 10</Menu.Item>
-                            <Menu.Item key="11">Option 11</Menu.Item>
-                            <Menu.Item key="12">Option 12</Menu.Item>
-                        </SubMenu>
-                        <Menu.Item key='3' icon={<VideoCameraOutlined />}>
-                            <Link to='/login'>
-                                登录
-                            </Link>
-                        </Menu.Item>
-                    </Menu>
+                    <MenuComponent menuClick={this.handlerSiderMenuClick} selectedKeys={this.state.sideMenuSelectedKeys} />
                 </Sider>
 
                 <Layout className="site-layout">
@@ -124,17 +151,18 @@ export default class MainLayout extends Component {
 
                             <div style={{ float: "right", padding: "0 24px" }}>
 
-                                <div style={{ display: "inline-block", padding: "0 24px" }}>
+                                <div style={{ display: "inline-block", padding: "0 20px" }}>
                                     <Badge count={0}>
                                         <BellOutlined style={{ fontSize: '18px' }} />
                                     </Badge>
                                 </div>
 
-                                <div style={{ display: "inline-block", padding: "0 24px" }}>
+                                <div style={{ display: "inline-block", padding: "0 20px" }}>
                                     <Dropdown placement="bottomCenter" overlay={this.dropdownMenu}>
                                         <div>
                                             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                                 <Avatar icon={<UserOutlined />} />
+                                                <span style={{ marginLeft: "8px", color: "rgba(0,0,0,.65)" }}>{account}</span>
                                             </a>
                                         </div>
                                     </Dropdown>
@@ -185,3 +213,5 @@ export default class MainLayout extends Component {
         )
     }
 }
+
+export default withRouter(MainLayout)

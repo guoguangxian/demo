@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
 import './Home.css';
-import MainLayout from '../../layouts/MainLayout';
-
 
 const crumbs = [{
     "name": "xxx管理系统",
@@ -16,12 +14,8 @@ const crumbs = [{
 
 export default class Home extends Component {
     render() {
-
         return (
-            <div>首页</div>
-            // <MainLayout crumbs={crumbs} selectedKeys={['1']}>
-            //     首页
-            // </MainLayout>
+            <div><h1>首页</h1></div>
         )
     }
 }

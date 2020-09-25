@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import UserList from './pages/user/UserList'
 
-export default class Router extends Component {
+export default  class Router extends Component {
     render() {
         return (
             <HashRouter>

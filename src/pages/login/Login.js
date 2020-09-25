@@ -3,9 +3,9 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './Login.css'
 import { userLogin } from '../../api/UserApi';
+import { withRouter } from "react-router-dom";
 
-
-export default class Login extends Component {
+class Login extends Component {
 
     constructor() {
         super()
@@ -15,18 +15,20 @@ export default class Login extends Component {
         this.onFinish = this.onFinish.bind(this)
     }
 
-    componentWillMount() {
+    componentDidMount() {
         // 获取localstorage
         let userInfo = window.localStorage.getItem("userInfo");
         // 判断用户是否登录
         if (userInfo) {
             setTimeout(() => {
-                this.props.history.push({
-                    pathname: "/home"
-                })
+                this.props.history.push("/")
             }, 500);
-           
+
         }
+    }
+
+    componentWillUnmount() {
+        this.setState({})
     }
 
     onFinish(values) {
@@ -34,7 +36,7 @@ export default class Login extends Component {
         console.log(values.username)
 
         this.setState({
-            loginLoading:true
+            loginLoading: true
         })
 
         let reqData = {
@@ -43,20 +45,25 @@ export default class Login extends Component {
             clientType: 'web',
             deviceCode: 'web'
         }
-        
-       userLogin(reqData).then(
+
+        userLogin(reqData).then(
             (res) => {
                 console.log("get article response:", res);
-                window.localStorage.setItem("userInfo", JSON.stringify({"a":1}))
-                this.setState({
-                    loginLoading:false
-                })
-                console.log(2222)
-                this.props.history.push('/home')
+                if (res) {
+                    window.localStorage.setItem("userInfo", JSON.stringify(res.data))
+                    this.setState({
+                        loginLoading: false
+                    })
+                    this.props.history.push("/")
+                } else {
+                    this.setState({
+                        loginLoading: false
+                    })
+                }
             }
         )
         console.log(1111)
-        
+
     }
 
     render() {
@@ -92,3 +99,5 @@ export default class Login extends Component {
         )
     }
 }
+
+export default withRouter(Login)
