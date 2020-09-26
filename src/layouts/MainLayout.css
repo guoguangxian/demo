@@ -14,8 +14,35 @@
     height: 32px;
     background: rgba(255, 255, 255, 0.2);
     margin: 16px;
+    line-height:32px;
+    /* text-align: center; */
+    color: aliceblue;
+    font-size: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .logo :nth-child(1){
+    margin:0 5px 0 5px
+  }
+  .logo :nth-child(2){
+    opacity:1;
+    transition: opacity 0.3s;
+  }
+
+  .ant-layout-sider-collapsed .logo{
+    padding: 0 16px;
+  }
+
+  .ant-layout-sider-collapsed .logo :nth-child(1){
+    margin: 0;
   }
   
+  .ant-layout-sider-collapsed .logo :nth-child(2){
+    opacity: 0;
+    max-width: 0;
+  }
+
   .site-layout .site-layout-background {
     background: #fff;
   }

@@ -1,0 +1,1 @@
+export const system_name = 'xxx管理系统'

@@ -8,7 +8,8 @@ import React, { Component } from 'react';
 import MenuComponent from '../components/MenuComponent';
 import MenuConfig from '../config/MenuConfig';
 import './MainLayout.css';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { system_name } from '../config/SystemConfig';
 
 
 const { Header, Sider, Content, Footer } = Layout;
@@ -64,10 +65,14 @@ class MainLayout extends Component {
         })
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         clearTimeout(this.aa)
     }
 
+    /**
+     * 把菜单数据转为路径和菜单key的映射关系
+     * @param {*} data 
+     */
     changeToMenuMap = (data) => {
         let map = new Map()
         data.map((item, index) => {
@@ -81,13 +86,18 @@ class MainLayout extends Component {
         return map;
     }
 
+    /**
+     * 侧边栏收缩和展开
+     */
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed,
         });
     };
 
-    // 头像下拉菜单
+    /**
+     * 头像下拉菜单
+     */
     dropdownMenu = () => {
         return (
             <Menu>
@@ -107,17 +117,27 @@ class MainLayout extends Component {
         )
     }
 
-    handlerLogout=()=> {
+    /**
+     * 用户登出处理
+     */
+    handlerLogout = () => {
         window.localStorage.removeItem("userInfo")
         this.props.history.push("/login")
     }
 
+    /**
+     * 设置被选中的菜单
+     * @param {*} param0 
+     */
     handlerSiderMenuClick({ item, key, keyPath, domEvent }) {
         this.setState({
             sideMenuSelectedKeys: [key]
         })
     }
 
+    /**
+     * 获取用户名
+     */
     getAccount() {
         let userInfo = window.localStorage.getItem("userInfo");
         let account = '';
@@ -127,15 +147,21 @@ class MainLayout extends Component {
         return account
     }
 
+    getA = () => {
+        return <span>{system_name}</span>
+    }
+
     render() {
         let account = this.getAccount();
-        console.log('render')
+        console.log(system_name)
         return (
-           
+
             <Layout>
                 {/* 侧边栏 */}
                 <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
-                    <div className='logo'></div>
+                    <div className='logo'>
+        <span> <UserOutlined></UserOutlined></span> <span>{system_name}</span>
+                    </div>
                     <MenuComponent menuClick={this.handlerSiderMenuClick} selectedKeys={this.state.sideMenuSelectedKeys} />
                 </Sider>
 
